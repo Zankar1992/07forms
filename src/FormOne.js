@@ -1,30 +1,78 @@
 import React from 'react'
-import { Formik, Form, Field, FieldArray } from 'formik';
-import * as yup from 'yup';
+import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
+import * as yup from 'yup'; 
+import KErrorMessage from './components/KErrorMessage';
 
 const validationSchema = yup.object({
-  name: yup.string().required(),
+  // name field ne yup check karse k string required che k nai jo feild ma data add na kare to error avse
+  // custom error message
+  name: yup.string().required("Name is Required!"), 
+  phone: yup
+    .number()
+    .min(1000000000,"Not Valid a Phone Number!").max(9999999999,"Not Valid a Phone Number!")
+    .required("Phone is Required!"),
+    // regex method matches use karine expresson add karya che 
+  password: yup
+    .string()
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Minimum 8 characters,one uppercase letter, one lowercase letter, one number and one special character"       
+    )
+    .required("Password is Required!"),
+  gender: yup.string().required("Age is Required"),
+  date: yup.date().required("Date of Birth is Required"),
+  income: yup.string().required("Income is Required"),
+  about: yup
+    .string()
+    .min(5,"too small!@")
+    .max(500,"Too Long String")
+    .required("About is required"),
+  social: yup
+    .array()
+    .of(
+      yup
+      .string("String is Required!")
+      .min(4,"Too Short")
+      .max(20,"Too Long")
+      .required("Required")
+    )  
+    .min(1,"Atleast One Social Media is Required!")
+    .required("Required"),
+  hobbies: yup
+    .array()
+    .of(
+      yup
+      .string("String is Required!")
+      .min(4,"Too Short")
+      .max(20,"Too Long")
+      .required("Required")
+    )  
+    .min(1,"Atleast One Hobbies is Required!")
+    .required("Required"),
 })
 
 const FormOne = () => {
   return (
     <div>
-      <Formik initialValues={{
-        name: "",
-        phone: "",
-        password: "",
-        gender: "",
-        date: "",
-        income: "",
-        about: "",
-        hobbies:[], 
+      <Formik 
+        validationSchema={validationSchema}
+        initialValues={{
+          name: "",
+          phone: "",
+          password: "",
+          gender: "",
+          date: "",
+          income: "",
+          about: "",
+          hobbies:[], 
+          social:[],
         // array ma pn facebook nd twitter ne store kari sakay
-        // social:[] 
         // nested field object create karyo che social ni inside two object che 
-        social: {
-          facebook: "",
-          twitter: "",
-        }
+        //  or
+        // social: {
+        //   facebook: "",
+        //   twitter: "",
+        // }
       }}
         onSubmit={(values) => {
           console.log(values);
@@ -33,21 +81,27 @@ const FormOne = () => {
           <Form>
             <label>Name:</label>
             <Field name="name" type="text" />
-            <br /> <br />
+            <KErrorMessage name="name"/>
+            <br />
             <label>Phone:</label>
             <Field name="phone" type="number" />
+            <KErrorMessage name="phone"/>
             <br /> <br />
             <label>Password:</label>
-            <Field name="password" type="text" />
+            <Field name="password" type="text"/>
+            <i className="far fa-key"></i>
+            <KErrorMessage name="password"/>
             <br /> <br />
             <label>Gender: &nbsp;</label>
             <label>Male:</label>
             <Field name="gender" value="male" type="radio" />
             <label>Female:</label>
             <Field name="gender" value="female" type="radio" />
+             <KErrorMessage name="gender"/>
             <br /> <br />
             <label>Date:</label>
             <Field name="date" type="date" />
+            <KErrorMessage name="date"/>
             <br /> <br />
             <label>Income:</label>
             <Field name="income" as="select">
@@ -56,21 +110,26 @@ const FormOne = () => {
               <option value="5000">Rs 5000</option>
               <option value="10000">Rs 10000</option>
             </Field>
+            <KErrorMessage name="income"/>
             <br /> <br />
             <label>About:</label>
             <Field name="about" as="textarea" />
+            <KErrorMessage name="about"/>
             <br /> <br />
             <label>Social:</label>
+            <KErrorMessage name="social"/>
             <br /> <br />
             <label>Facebook:</label>
             {/* <Field name="social.facebook" type="text" /> */}
             {/* array ma store index apine */}
             <Field name="social[0]" type="text"/>
+            <KErrorMessage name="social.0"/>
             <br /> <br />
             <label>Twitter:</label>
             {/* <Field name="social.twitter" type="text" /> */}
             {/* array ma store index apine */}
             <Field name="social[1]" type="text"/>
+            <KErrorMessage name="social.1"/>
             <br /> <br />
             <FieldArray
               name="hobbies"
@@ -80,6 +139,7 @@ const FormOne = () => {
                     values.hobbies.map((hobbies, index) => (
                       <div key={index}>
                         <Field name={`hobbies.${index}`} />
+                        <KErrorMessage name={`hobbies.${index}`}/>
                         <button
                           type="button"
                           onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
