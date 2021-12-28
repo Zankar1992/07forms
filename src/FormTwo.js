@@ -1,5 +1,5 @@
 import React from 'react'
-import { useFormik, yupToFormErrors } from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 const FormTwo = () => {
@@ -9,7 +9,7 @@ const FormTwo = () => {
     validationSchema:Yup.object({
       firstname: Yup
       .string()
-      .required("About is required")
+      .required("FirstName is required")
     }),
     onSubmit:values => {
       console.log(values)
@@ -24,9 +24,12 @@ const FormTwo = () => {
             className="form-control"
             type="text"
             name="firstname"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.firstname}
+            //  useformik ni helper method getFieldProps che 
+            {...formik.getFieldProps('firstname')}
+            
+            // onChange={formik.handleChange}
+            // onBlur={formik.handleBlur}
+            // value={formik.values.firstname}
           />
           {formik.errors.firstname && formik.touched.firstname ?
           <span>{formik.errors.firstname}</span>

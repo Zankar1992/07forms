@@ -1,7 +1,7 @@
 import React from 'react'
 import { Field, Form } from 'formik';
 
-const FormThree = () => {
+const FormParth = () => {
   return (
     <div className="container">
       <div className="col-md-12 mt-5">
@@ -22,4 +22,4 @@ const FormThree = () => {
   )
 }
 
-export default FormThree;
+export default FormParth;

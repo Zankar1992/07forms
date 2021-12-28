@@ -1,7 +1,8 @@
 import React,{ Component} from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
 import Header from './Header';
-import FormOne from './FormDetail';
+import FormOne from './FormParth';
 import FormTwo from './FormTwo';
 import FormThree from './FormThree';
 
