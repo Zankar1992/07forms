@@ -59,7 +59,7 @@ const validationSchema = Yup.object({
     .required("Required"),
 })
 
-const FormDetail = () => {
+const FormOne = () => {
   return (
     <div>
       <Formik
@@ -203,5 +203,5 @@ const FormDetail = () => {
   )
 }
 
-export default FormDetail;
+export default FormOne;
 
