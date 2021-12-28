@@ -15,21 +15,22 @@ const FormTwo = () => {
       console.log(values)
     }
   })
+
   return (
     <div className="container">
       <div className="col-md-12 mt-5">
         <form onSubmit={formik.handleSubmit}>
-          <label/>First name<label/>
-          <field 
+          <label htmlfor="firstname">First name</label>
+          <input // useformik method use kariye tyare field nd badle input
             className="form-control"
             type="text"
             name="firstname"
             //  useformik ni helper method getFieldProps che 
             {...formik.getFieldProps('firstname')}
             
-            // onChange={formik.handleChange}
-            // onBlur={formik.handleBlur}
-            // value={formik.values.firstname}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.firstname}
           />
           {formik.errors.firstname && formik.touched.firstname ?
           <span>{formik.errors.firstname}</span>
@@ -38,7 +39,7 @@ const FormTwo = () => {
           <button className="btn btn-primary btn-lg btn-black" type="submit">
             Submit
           </button>
-       </form>
+       </form>  
       </div>      
     </div>
   )
