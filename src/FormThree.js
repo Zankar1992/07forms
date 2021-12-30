@@ -8,9 +8,15 @@ const FormThree = () => {
   const formikProps = {
     initialValues: { firstname: '', color: '', lastname: '', age: '' },
     validationSchema: Yup.object({
-      firstname: Yup.string().required('Sorry, this is required'),
-      lastname: Yup.string().required('Sorry, this is required'),
-      age: Yup.string().required('Sorry, this is required')
+      firstname: Yup
+        .string()
+        .required('Sorry, this is required'),
+      lastname: Yup
+        .string()
+        .required('Sorry, this is required'),
+      age: Yup
+        .string()
+        .required('Sorry, this is required')
     }),
     onSubmit: values => {
       console.log(values)
@@ -39,23 +45,24 @@ const FormThree = () => {
 
   )
 
-return (
-    <Formik {...formikProps}> 
+  return (
+    <Formik {...formikProps}>
       {formik => (
         <div className="container">
           <div className="col-md-12 mt-5">
             <Form>
               <label htmlFor="firstname">First name</label>
-              <Field 
-                name="firstname" 
-                type="text" 
-                className="form-control" 
+              <Field
+                name="firstname"
+                type="text"
+                className="form-control"
               />
               {formik.values.firstname}
-              <KErrorMessage name="firstname"/>
-              {/* {formik.errors.firstname && formik.touched.firstname ?
+              {/* <KErrorMessage name="firstname" /> */}
+                  {/* or */}
+              {formik.errors.firstname && formik.touched.firstname ?
                 <span>{formik.errors.firstname}</span>
-                : null} */}
+                : null}
               <hr className="mb-4" />
 
               <label htmlFor="color">First name</label>
@@ -68,6 +75,7 @@ return (
                 <option value="green">Green</option>
                 <option value="blue">Blue</option>
               </Field>
+              <KErrorMessage name="firstname"/>
 
               <hr className="mb-4" />
 
@@ -77,7 +85,7 @@ return (
                 placeholder="Last name"
                 labelName="Enter your lastname"
               />
-
+              <KErrorMessage name="lastname"/>
               <hr className="mb-4" />
               <Field
                 name="age"
@@ -85,7 +93,7 @@ return (
                 placeholder="put your age"
                 labelName="Enter your age"
               />
-
+              <KErrorMessage name="age"/>
               <hr className="mb-4" />
               <button className="btn btn-primary btn-lg btn-block" type="submit">
                 Submit
