@@ -11,6 +11,7 @@ const Header = () => {
         <Link className="p-2 text-dark" to="/formtwo">Form Two</Link>
         <Link className="p-2 text-dark" to="/formthree">Form Three</Link>
         <Link className="p-2 text-dark" to="/formfour">Form Four</Link>
+        <Link className="p-2 text-dark" to="/back">Back</Link>
       </nav>
     </div>
   )
