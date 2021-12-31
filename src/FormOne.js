@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Formik, Form, Field, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import KErrorMessage from './components/KErrorMessage';
+import PreviewImage from './components/PreviewImage';
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
 
 const validationSchema = Yup.object({
   // name field ne Yup check karse k string required che k nai jo feild ma data add na kare to error avse
@@ -57,9 +59,27 @@ const validationSchema = Yup.object({
     )
     .min(1, "Atleast One Hobbies is Required!")
     .required("Required"),
+  file: Yup
+    .mixed()       //any type of file format jpg,png,jpeg,txt...
+    .nullable()    //check karse null nathi 
+    .required("")  // black field nathi check karse  
+
+    .test(
+      "FILE_SIZE",  //key  value test karse 
+      "Uploaded file is too big.",
+      (value) => !value || (value && value.size <= 1024 * 1024)  //value (file) check karse size vhdare hse to msg show karse
+    )
+    .test(
+      "FILE_FORMAT", //file format check karse
+      "Uploaded file has unsupported format.",
+      // array method (include) value type include nahi hoy to error msg show thase
+      (value) => !value || (value && SUPPORTED_FORMATS.includes(value?.type))
+    )
 })
 
 const FormOne = () => {
+  // hidden file ne open karva mate hook use thay che useref
+  const fileRef = useRef(null);
   return (
     <div>
       <Formik
@@ -82,35 +102,57 @@ const FormOne = () => {
           //   facebook: "",
           //   twitter: "",
           // }
+          file: null,
         }}
         onSubmit={(values) => {
           console.log(values);
-        }}>
+        }}
+      >
         {/* event method  */}
         {({ values,
           errors,
           touched,
           handleChange,
           handleBlur,
-          handleSubmit
+          handleSubmit,
+          setFieldValue
         }) => (
 
           <Form className="container">
             <h2>Personal Information</h2>
-            <hr />
+            {/* file uploading */}
+            <input
+              ref={fileRef}
+              hidden     //input file ne hidden kari 
+              type="file"
+              // name="file"    //field use hoy tyare name attribute use thase input ma use nai thay
+              onChange={(event) => {
+                setFieldValue("file", event.target.files[0]);
+              }}
+            />
+            <KErrorMessage name="file" />
+            {values.file && <PreviewImage file={values.file} />}
+            <br />
+            <button
+              onClick={() => {
+                fileRef.current.click(); // upload button click nd open this
+              }}
+            >
+              Upload
+            </button> &nbsp;
             <label>Name:</label>
             <Field
               name="name"
               type="text"
-              value={values.name}
-              onChange={handleChange}
-              onBlur={handleBlur}
+              // value={values.name}
+              // onChange={handleChange}
+              // onBlur={handleBlur}
             />
-            {errors.name && touched.name ?
+            {/* {errors.name && touched.name ?
               <span>{errors.name}</span>
-              : null}
+              : null} */}
             {/* or  */}
-            {/* <KErrorMessage name="name" /> */}
+            <KErrorMessage name="name" />
             <br /> <br />
             <label>Phone:</label>
             <Field name="phone" type="number" />
